@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bj53s6w12n7ya"]
+[gd_scene load_steps=10 format=3 uid="uid://bj53s6w12n7ya"]
 
 [ext_resource type="Script" uid="uid://bv6skexvrv481" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://3oofuonw05r8" path="res://assets/first_person_arms.glb" id="2_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://lky204uemp8" path="res://scenes/gun.tscn" id="3_gun"]
 [ext_resource type="PackedScene" uid="uid://by5ihoam0sbtf" path="res://scenes/health_jug.tscn" id="4_qhqgy"]
+[ext_resource type="FontFile" uid="uid://yh04kyitodnp" path="res://assets/Youre Gone It.otf" id="4_tuyoq"]
+[ext_resource type="FontFile" uid="uid://dihwvgiaxc7m7" path="res://assets/Youre Gone.otf" id="5_fjrip"]
 
 [sub_resource type="Animation" id="Animation_s2gip"]
 resource_name = "aim_forward"
@@ -43,32 +45,13 @@ _data = {
 &"aim_self": SubResource("Animation_cnq18")
 }
 
-[sub_resource type="Theme" id="Theme_g2els"]
-
-[sub_resource type="Theme" id="Theme_qhqgy"]
-
-[sub_resource type="FontFile" id="FontFile_dqkch"]
-resource_local_to_scene = true
-subpixel_positioning = 0
-msdf_pixel_range = 14
-msdf_size = 128
-cache/0/16/0/ascent = 0.0
-cache/0/16/0/descent = 0.0
-cache/0/16/0/underline_position = 0.0
-cache/0/16/0/underline_thickness = 0.0
-cache/0/16/0/scale = 1.0
-cache/0/64/0/ascent = 0.0
-cache/0/64/0/descent = 0.0
-cache/0/64/0/underline_position = 0.0
-cache/0/64/0/underline_thickness = 0.0
-cache/0/64/0/scale = 1.0
-
 [node name="Player" type="Node3D"]
 script = ExtResource("1_g2els")
 
 [node name="ArmsMesh" parent="." instance=ExtResource("2_3vyb7")]
 
 [node name="Gun" parent="." instance=ExtResource("3_gun")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Gun"]
 libraries = {
@@ -80,77 +63,128 @@ transform = Transform3D(-1, 7.105428e-15, -8.742278e-08, -5.5848723e-08, 0.76934
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="TargetLabel" type="Label" parent="CanvasLayer"]
-visible = false
-anchors_preset = -1
-anchor_top = 0.887
-anchor_right = 0.202
-anchor_bottom = 1.0
-offset_top = 0.22399902
-offset_right = 0.29599
-grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-
-[node name="TopHUD" type="HBoxContainer" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 40.0
+[node name="TopHUDContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 50.0
 grow_horizontal = 2
+theme_override_constants/separation = 10
 
-[node name="CurrRound" type="Label" parent="CanvasLayer/TopHUD"]
+[node name="TargetRow" type="HBoxContainer" parent="CanvasLayer/TopHUDContainer"]
 layout_mode = 2
-theme = SubResource("Theme_g2els")
-theme_override_colors/font_color = Color(0.811487, 0.00041623475, 0.7890223, 1)
-text = "Round: 0 Turn: 0"
+theme_override_constants/separation = 20
+alignment = 1
 
-[node name="BulletCounts" type="Label" parent="CanvasLayer/TopHUD"]
+[node name="TargetLabelStatic" type="Label" parent="CanvasLayer/TopHUDContainer/TargetRow"]
+custom_minimum_size = Vector2(80, 30)
 layout_mode = 2
-text = "FUCK"
+theme_override_fonts/font = ExtResource("4_tuyoq")
+theme_override_font_sizes/font_size = 24
+text = "Target:"
 
-[node name="LastShot" type="Label" parent="CanvasLayer/TopHUD"]
+[node name="TargetValuePanel" type="PanelContainer" parent="CanvasLayer/TopHUDContainer/TargetRow"]
+custom_minimum_size = Vector2(200, 30)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.841111, 0, 0.21894732, 1)
-text = "Last Shot: N/A"
 
-[node name="Winner" type="Label" parent="CanvasLayer"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -43.5
-offset_right = 20.0
-offset_bottom = 43.5
-grow_horizontal = 2
-grow_vertical = 2
-theme = SubResource("Theme_qhqgy")
-theme_override_colors/font_color = Color(0.84263474, 3.5616756e-06, 4.813075e-07, 1)
-theme_override_fonts/font = SubResource("FontFile_dqkch")
-theme_override_font_sizes/font_size = 64
+[node name="TargetValueContainer" type="HBoxContainer" parent="CanvasLayer/TopHUDContainer/TargetRow/TargetValuePanel"]
+layout_mode = 2
+
+[node name="LeftArrow" type="Label" parent="CanvasLayer/TopHUDContainer/TargetRow/TargetValuePanel/TargetValueContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "◀"
+
+[node name="TargetLabel" type="Label" parent="CanvasLayer/TopHUDContainer/TargetRow/TargetValuePanel/TargetValueContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_fjrip")
+theme_override_font_sizes/font_size = 22
+text = "PLAYER 1"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="BottomHUD" type="HBoxContainer" parent="CanvasLayer"]
+[node name="RightArrow" type="Label" parent="CanvasLayer/TopHUDContainer/TargetRow/TargetValuePanel/TargetValueContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "▶"
+
+[node name="RoundRow" type="HBoxContainer" parent="CanvasLayer/TopHUDContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="RoundLabelStatic" type="Label" parent="CanvasLayer/TopHUDContainer/RoundRow"]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_tuyoq")
+theme_override_font_sizes/font_size = 24
+text = "Round:"
+
+[node name="RoundValuePanel" type="PanelContainer" parent="CanvasLayer/TopHUDContainer/RoundRow"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+
+[node name="RoundValueContainer" type="HBoxContainer" parent="CanvasLayer/TopHUDContainer/RoundRow/RoundValuePanel"]
+layout_mode = 2
+
+[node name="RoundLabel" type="Label" parent="CanvasLayer/TopHUDContainer/RoundRow/RoundValuePanel/RoundValueContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_fjrip")
+theme_override_font_sizes/font_size = 22
+text = "Round 1 | Turn 1"
+horizontal_alignment = 1
+
+[node name="BulletRow" type="HBoxContainer" parent="CanvasLayer/TopHUDContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BulletLabelStatic" type="Label" parent="CanvasLayer/TopHUDContainer/BulletRow"]
+custom_minimum_size = Vector2(80, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_tuyoq")
+theme_override_font_sizes/font_size = 24
+text = "Bullets:"
+
+[node name="BulletValuePanel" type="PanelContainer" parent="CanvasLayer/TopHUDContainer/BulletRow"]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+
+[node name="BulletValueContainer" type="HBoxContainer" parent="CanvasLayer/TopHUDContainer/BulletRow/BulletValuePanel"]
+layout_mode = 2
+
+[node name="BulletLabel" type="Label" parent="CanvasLayer/TopHUDContainer/BulletRow/BulletValuePanel/BulletValueContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_fjrip")
+theme_override_font_sizes/font_size = 22
+text = "Live: 0 | Blank: 0"
+horizontal_alignment = 1
+
+[node name="InventoryContainer" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
+pivot_offset = Vector2(0, -60)
+theme_override_constants/separation = 10
+alignment = 1
 
-[node name="HPList" type="Label" parent="CanvasLayer/BottomHUD"]
+[node name="LeftArrow" type="Label" parent="CanvasLayer/InventoryContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0.9019608, 0.21960784, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
+text = "◀"
+
+[node name="SlotContainer" type="HBoxContainer" parent="CanvasLayer/InventoryContainer"]
+layout_mode = 2
+
+[node name="RightArrow" type="Label" parent="CanvasLayer/InventoryContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "▶"
 
 [node name="HealthJug" parent="." instance=ExtResource("4_qhqgy")]
 transform = Transform3D(-2.6226832e-07, 0, 6, 0, 6, 0, -6, 0, -2.6226832e-07, -16.181383, 13.413353, 4.2951813)
